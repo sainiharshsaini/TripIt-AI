@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import { Button } from "../ui/button"
 
 function Hero() {
@@ -9,9 +10,11 @@ function Hero() {
       <p className="text-xl text-gray-500 text-center">
         Your personal trip planner and travel cursor, creating custom itinerations tailored to your interests and budget
       </p>
-      <Button>
-        Get Started, It's Free
-      </Button>
+      <Link to={"/create-trip"}>
+        <Button>
+          Get Started, It's Free
+        </Button>
+      </Link>
     </div>
   )
 }
