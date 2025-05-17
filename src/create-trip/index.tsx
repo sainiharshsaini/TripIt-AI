@@ -1,8 +1,9 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { AI_PROMPT, SelectBudgetOptions, SelectTravelesList } from '@/constants/options';
+import geminiResponse from '@/service/AIModal';
 import { useEffect, useState } from 'react'
-import GooglePlacesAutocomplete from 'react-google-places-autocomplete'
+// import GooglePlacesAutocomplete from 'react-google-places-autocomplete'
 import { toast } from 'sonner';
 
 function CreateTrip() {
@@ -25,15 +26,18 @@ function CreateTrip() {
             toast("Please fill all details")
             return;
         }
-        const FINAL_PROMPT=AI_PROMPT
-        .replace('{location}', formData?.location?.label)
-        .replace('{totalDays}', formData?.noOfDays)
-        .replace('{traveler}', formData?.traveler)
-        .replace('{budget}', formData?.budget)
-        .replace('{totalDays}', formData?.noOfDays)
+        const FINAL_PROMPT = AI_PROMPT
+            // .replace('{location}', formData?.location?.label)
+            .replace('{location}', formData?.location)
+            .replace('{totalDays}', formData?.noOfDays)
+            .replace('{traveler}', formData?.traveler)
+            .replace('{budget}', formData?.budget)
+            .replace('{totalDays}', formData?.noOfDays)
 
         console.log(FINAL_PROMPT);
-        const result = await
+
+        const result = geminiResponse
+        console.log(result + "harsh");
     }
 
     return (
@@ -50,13 +54,15 @@ function CreateTrip() {
                         What is destination of choice?
                     </h2>
                     {/* i am not getting suggestion because i don't add google place api key */}
-                    <GooglePlacesAutocomplete
-                        apiKey={import.meta.env.GOOGLE_PLACE_API_KEY}
+                    {/* <GooglePlacesAutocomplete
+                        apiKey={import.meta.env.VITE_GOOGLE_PLACE_API_KEY}
                         selectProps={{
                             place,
                             onChange: (value) => { setPlace(value); handleInputChange('location', value) }
                         }}
-                    />
+                    /> */}
+
+                    <Input type='string' placeholder='select location' onChange={(e) => handleInputChange('location', e.target.value)} />
                 </div>
 
                 <div>
