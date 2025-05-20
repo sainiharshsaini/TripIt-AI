@@ -5,6 +5,14 @@ import { useEffect, useState } from 'react'
 // import GooglePlacesAutocomplete from 'react-google-places-autocomplete'
 import { toast } from 'sonner';
 import axios from 'axios'
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader
+} from "@/components/ui/dialog"
+import { FcGoogle } from "react-icons/fc";
+import { useGoogleLogin } from '@react-oauth/google';
 
 interface FormData {
     location?: string;
@@ -16,7 +24,7 @@ interface FormData {
 function CreateTrip() {
     // const [place, setPlace] = useState();
     const [formData, setFormData] = useState<FormData>({});
-    // const [geminiResponse, setGeminiResponse] = useState('');
+    const [openDialog, setOpenDialog] = useState(false);
 
     const handleInputChange = (name: keyof FormData, value: string) => {
         setFormData((prevFormData) => ({
@@ -29,7 +37,19 @@ function CreateTrip() {
         console.log(formData);
     }, [formData])
 
+    const login = useGoogleLogin({
+        onSuccess: (codeRes) => GetUserProfile(codeRes),
+        onError: (error) => console.log(error)
+    })
+
     const OnGenerateTrip = async () => {
+
+        const user = localStorage.getItem('user');
+        if (!user) {
+            setOpenDialog(true);
+            return;
+        }
+
         if (formData?.noOfDays && parseInt(formData.noOfDays) > 5 && !formData?.location || !formData?.budget || !formData?.traveler) {
             toast("Please fill all details")
             return;
@@ -45,13 +65,27 @@ function CreateTrip() {
         console.log(FINAL_PROMPT);
 
         try {
-            const result = await axios.post('http://localhost:3000/api/generate', {prompt: FINAL_PROMPT})
+            const result = await axios.post('http://localhost:3000/api/generate', { prompt: FINAL_PROMPT })
             console.log(result.data.trip);
 
         } catch (error) {
             console.error("Error sending message:", error);
             alert('Failed to generate trip.')
         }
+    }
+
+    const GetUserProfile = (tokenInfo: any) => {
+        axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${tokenInfo?.access_token}`, {
+            headers: {
+                Authorization: `Bearer ${tokenInfo?.access_token}`,
+                Accept: 'Application/json'
+            }
+        }).then((res) => {
+            console.log(res);
+            localStorage.setItem('user', JSON.stringify(res.data));
+            setOpenDialog(false);
+            OnGenerateTrip();
+        })
     }
 
     return (
@@ -135,6 +169,20 @@ function CreateTrip() {
             <div className='my-10 flex justify-end'>
                 <Button onClick={OnGenerateTrip}>Generate Trip</Button>
             </div>
+
+            <Dialog open={openDialog}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogDescription>
+                            <img src="/logo.svg" alt="logo" />
+                            <h2 className='font-bold text-lg mt-7'>Sign In With Google</h2>
+                            <p>Sign into the App with Google Authentication securely</p>
+                        
+                            <Button onClick={login} className='w-full mt-5 flex gap-4 items-center'><FcGoogle className='h-7 w-7'/>Sign In With Google</Button>
+                        </DialogDescription>
+                    </DialogHeader>
+                </DialogContent>
+            </Dialog>
         </div>
     )
 }
