@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { AI_PROMPT, SelectBudgetOptions, SelectTravelesList } from '@/constants/options';
 import { useEffect, useState } from 'react'
-// import GooglePlacesAutocomplete from 'react-google-places-autocomplete'
+import GooglePlacesAutocomplete from 'react-google-places-autocomplete'
 import { toast } from 'sonner';
 import axios from 'axios'
 import {
@@ -26,7 +26,7 @@ interface FormData {
 }
 
 function CreateTrip() {
-    // const [place, setPlace] = useState();
+    const [place, setPlace] = useState();
     const [formData, setFormData] = useState<FormData>({});
     const [openDialog, setOpenDialog] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -65,8 +65,8 @@ function CreateTrip() {
         setLoading(true);
 
         const FINAL_PROMPT = AI_PROMPT
-            // .replace('{location}', formData?.location?.label)
-            .replace('{location}', formData?.location || '')
+            .replace('{location}', formData?.location?.label || '')
+            // .replace('{location}', formData?.location || '')
             .replace('{totalDays}', formData?.noOfDays || '')
             .replace('{traveler}', formData?.traveler || '')
             .replace('{budget}', formData?.budget || '')
@@ -128,19 +128,19 @@ function CreateTrip() {
                         What is destination of choice?
                     </h2>
                     {/* i am not getting suggestion because i don't add google place api key */}
-                    {/* <GooglePlacesAutocomplete
+                    <GooglePlacesAutocomplete
                         apiKey={import.meta.env.VITE_GOOGLE_PLACE_API_KEY}
                         selectProps={{
                             place,
                             onChange: (value) => { setPlace(value); handleInputChange('location', value) }
                         }}
-                    /> */}
+                    />
 
-                    <Input
+                    {/* <Input
                         type='string'
                         placeholder='Select location'
                         onChange={(e) => handleInputChange('location', e.target.value)}
-                    />
+                    /> */}
                 </div>
 
                 <div>

@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const BASE_URL='https://maps.googleapis.com/maps/api/place/textsearch/output?parameters'
+const BASE_URL='https://places.googleapis.com/v1/places:searchText'
 
 const config = {
     headers: {

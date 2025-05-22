@@ -6,6 +6,7 @@ import InfoSection from "../components/InfoSection";
 import Hotels from "../components/Hotels";
 import PlacesToVisit from "../components/PlacesToVisit";
 import Footer from "../components/Footer";
+import { useState, useEffect } from "react";
 
 
 function ViewTrip() {
