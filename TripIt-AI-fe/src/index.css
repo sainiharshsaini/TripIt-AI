@@ -50,7 +50,7 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
-a {
+/* a {
   font-weight: 500;
   color: #646cff;
   text-decoration: inherit;
@@ -94,7 +94,7 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
-}
+} */
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);

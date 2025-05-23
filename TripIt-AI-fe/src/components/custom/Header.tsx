@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Button } from '../ui/button'
+import { Button } from '../ui/button';
 import {
     Popover,
     PopoverContent,
@@ -16,6 +16,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import { FcGoogle } from 'react-icons/fc';
 import { useGoogleLogin } from '@react-oauth/google';
+import { FiPlusCircle } from "react-icons/fi";
+import { FiUserPlus } from "react-icons/fi";
 
 function Header() {
     const [openDialog, setOpenDialog] = useState(false);
@@ -46,23 +48,33 @@ function Header() {
     }
 
     return (
-        <div className='flex justify-between items-center shadow-sm p-3 px-5'>
-            <img src="/logo.svg" alt="logo" />
+        <div className='flex justify-between items-center shadow-sm shadow-orange-100 p-5 md:px-10 lg:px-20'>
+            <img src="/TripIt-AI-logo.png" alt="logo" width={120} height={120} />
             <div>
                 {user ?
-                    <div className='flex items-center gap-3'>
-                        <a href="/create-trip">
-                            <Button variant="outline" className='rounded-full'>+ Create Trip</Button>
-                        </a>
-                        <a href="/my-trips">
-                            <Button variant="outline" className='rounded-full'>My Trips</Button>
-                        </a>
+                    <div className='flex items-center gap-4'>
+                        <div className='hidden md:flex items-center gap-4'>
+                            <a href="/create-trip">
+                                <Button variant="outline" className='rounded-full'><FiPlusCircle />Create Trip</Button>
+                            </a>
+                            <a href="/my-trips">
+                                <Button variant="outline" className='rounded-full'>My Trips</Button>
+                            </a>
+                        </div>
                         <Popover>
                             <PopoverTrigger>
                                 <img src={user?.picture} alt='user profile' className='h-[35px] w-[35px] rounded-full' />
                             </PopoverTrigger>
-                            <PopoverContent>
-                                <h2 className='cursor-pointer' onClick={() => {
+                            <PopoverContent className='flex flex-col gap-5 mr-5'>
+                                <div className='flex gap-4 md:hidden'>
+                                    <a href="/create-trip">
+                                        <Button variant="outline" className='rounded-full'><FiPlusCircle />Create Trip</Button>
+                                    </a>
+                                    <a href="/my-trips">
+                                        <Button variant="outline" className='rounded-full'>My Trips</Button>
+                                    </a>
+                                </div>
+                                <h2 className='cursor-pointer text-red-500' onClick={() => {
                                     googleLogout();
                                     localStorage.clear();
                                     window.location.reload();
@@ -70,7 +82,7 @@ function Header() {
                             </PopoverContent>
                         </Popover>
                     </div> :
-                    <Button onClick={() => setOpenDialog(true)}>Sign In</Button>
+                    <Button className='rounded-full bg-gradient-to-br from-[#FFD700] to-[#FF6347]' onClick={() => setOpenDialog(true)}><FiUserPlus />Sign In</Button>
                 }
             </div>
             <Dialog open={openDialog}>
