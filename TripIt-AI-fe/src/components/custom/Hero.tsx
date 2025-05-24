@@ -19,7 +19,8 @@ function Hero() {
         </Link>
         <Link target="_blank" to={"https://youtu.be/zvLvXhXfdVM?si=rYjZWgFrn3NPt3SF"}>
           <Button variant={"outline"} className="rounded-full p-6 cursor-pointer">
-            <FaPlayCircle className="text-red-500" size="lg"/>How it works
+            <FaPlayCircle className="text-red-500" size="lg" />
+            How it works
           </Button>
         </Link>
       </div>

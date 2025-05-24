@@ -5,7 +5,6 @@ import { toast } from "sonner";
 import InfoSection from "../components/InfoSection";
 import Hotels from "../components/Hotels";
 import PlacesToVisit from "../components/PlacesToVisit";
-import Footer from "../components/Footer";
 import { useState, useEffect } from "react";
 
 
@@ -14,7 +13,7 @@ function ViewTrip() {
     const [trip, setTrip] = useState([]);
 
     useEffect(() => {
-        tripId && GetTripData();
+        if (tripId) GetTripData();
     }, [tripId])
 
     const GetTripData = async () => {
@@ -37,8 +36,6 @@ function ViewTrip() {
             <Hotels trip={trip}/>
             {/* Daily Plan */}
             <PlacesToVisit trip={trip}/>
-            {/* Footer */}
-            <Footer trip={trip}/>
         </div>
     )
 }
