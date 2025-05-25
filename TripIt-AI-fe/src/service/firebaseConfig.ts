@@ -1,7 +1,7 @@
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore"
+import { initializeApp, type FirebaseApp, type FirebaseOptions } from "firebase/app";
+import { Firestore, getFirestore } from "firebase/firestore"
 
-const firebaseConfig = {
+const firebaseConfig: FirebaseOptions = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
     authDomain: "gen-lang-client-0162341688.firebaseapp.com",
     projectId: "gen-lang-client-0162341688",
@@ -12,5 +12,5 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-export const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
+export const app: FirebaseApp = initializeApp(firebaseConfig);
+export const db: Firestore = getFirestore(app);

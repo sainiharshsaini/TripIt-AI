@@ -1,20 +1,34 @@
 import PlaceCardItem from "./PlaceCardItem"
 
-function PlacesToVisit({ trip }) {
-    
+function PlacesToVisit({ trip }: any) {
+
+    if (!trip || !trip.tripData || !trip.tripData.travelPlan || !trip.tripData.travelPlan.itinerary) {
+        // You can return a loading state, a message, or null/empty div
+        return (
+            <div className="mt-8 p-4 bg-white rounded-lg shadow-sm">
+                <h2 className="font-bold text-lg mb-4">Places to Visit</h2>
+                <p className="text-gray-500 text-center">No detailed itinerary available for this trip yet.</p>
+            </div>
+        );
+    }
+
     return (
-        <div>
-            <h2 className="font-bold text-lg">Places to visit</h2>
+        <div className="mt-8 p-4 bg-white rounded-lg shadow-sm">
+            <h2 className="font-bold text-lg mb-4">Places to visit</h2>
 
             <div>
-                {trip?.tripData?.travelPlan?.itinerary.map((item, index) => (
-                    <div key={index} className="mt-5">
-                        <h2 className="font-medium text-lg">Day {item?.day}</h2>
+                {trip?.tripData.travelPlan.itinerary.map((item: any, index: number) => (
+                    <div key={index} className="mt-5 border-b pb-4 last:border-b-0">
+                        <h2 className="font-medium text-xl mb-3 text-primary-500">Day {item?.day}</h2>
                         <div className="grid md:grid-cols-2 gap-5">
-                            {item.plan.map((place, index2) => (
-                                <div key={index2}>
-                                    <h2 className="font-medium text-sm text-orange-600">{place.timeTravel}</h2>
-                                    <PlaceCardItem place={place} index={index2}/>
+                            {item.plan.map((place: any, index2: number) => (
+                                <div key={index2} className="flex flex-col">
+                                    {place.timeTravel && (
+                                        <h2 className="font-medium text-sm text-orange-600 mb-1">
+                                            {place.timeTravel}
+                                        </h2>
+                                    )}
+                                    <PlaceCardItem place={place} key={index2} />
                                 </div>
                             ))}
                         </div>
