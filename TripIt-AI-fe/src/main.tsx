@@ -4,12 +4,12 @@ import './index.css'
 import App from './App.tsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import CreateTrip from './create-trip/index.tsx'
-import Header from './components/custom/Header.tsx'
+import Header from './components/layout/Header.tsx'
 import { Toaster } from 'sonner'
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import ViewTrip from './view-trip/[tripId]/index.tsx'
 import MyTrips from './my-trips/index.tsx'
-import Footer from './components/custom/Footer.tsx'
+import Footer from './components/layout/Footer.tsx'
 
 const router = createBrowserRouter([
   {

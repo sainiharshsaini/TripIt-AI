@@ -56,7 +56,8 @@ function Header() {
     return (
         <div className='flex justify-between items-center shadow-sm shadow-orange-100 p-5 md:px-10 lg:px-20'>
             <a href={"/"}>
-                <img src="/TripIt-AI-logo.png" alt="logo" width={120} height={120} />
+                <span className="text-3xl font-bold bg-gradient-to-bl from-[#FFD700] to-[#FF6347] text-transparent bg-clip-text">TripIt-AI</span>
+                {/* <img src="/TripIt-AI-logo.png" alt="logo" width={120} height={120} /> */}
             </a>
             <div>
                 {user ?
