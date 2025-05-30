@@ -24,16 +24,13 @@ function HotelCardItem({ hotel }: any) {
             return;
         }
 
-        const data = { textQuery };
-
         try {
-            const res = await GetPlaceDetails(data);
+            const res = await GetPlaceDetails({ textQuery });
 
-            if (res?.data?.places?.[0]?.photos?.[3]?.name) {
-                const imgUrl = PHOTO_REF_URL.replace('{NAME}', res.data.places[0].photos[3].name);
-                setPhotoUrl(imgUrl);
-            } else if (res?.data?.places?.[0]?.photos?.[0]?.name) {
-                const imgUrl = PHOTO_REF_URL.replace('{NAME}', res.data.places[0].photos[0].name);
+            const photoName = res?.data?.places?.[0]?.photos?.[3]?.name || res?.data?.places?.[0]?.photos?.[0]?.name
+
+            if (photoName) {
+                const imgUrl = PHOTO_REF_URL.replace('{NAME}', photoName);
                 setPhotoUrl(imgUrl);
             } else {
                 console.warn("No suitable photo found for hotel:", textQuery);
@@ -55,7 +52,7 @@ function HotelCardItem({ hotel }: any) {
 
     return (
         <Link to={mapLink} target="_blank" rel="noopener noreferrer">
-            <div className="hover:scale-105 transition-all cursor-pointer rounded-xl shadow-sm overflow-hidden">
+            <div className="hover:scale-103 transition-all cursor-pointer rounded-xl shadow-sm overflow-hidden">
                 <img src={photoUrl || '/placeholder.jpg'}
                     alt={`Image of ${hotel?.hotelName || 'hotel'}`}
                     className="rounded-t-xl h-[200px] w-full object-cover"

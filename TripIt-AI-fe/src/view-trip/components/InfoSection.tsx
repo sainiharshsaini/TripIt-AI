@@ -28,8 +28,10 @@ function InfoSection({ trip }: any) {
         try {
             const res = await GetPlaceDetails(data);
 
-            if (res?.data?.places?.[0]?.photos?.[3]?.name) {
-                const imgUrl = PHOTO_REF_URL.replace('{NAME}', res.data.places[0].photos[3].name);
+            const photoName = res?.data?.places?.[0]?.photos?.[3]?.name || res?.data?.places?.[0]?.photos?.[0]?.name
+
+            if (photoName) {
+                const imgUrl = PHOTO_REF_URL.replace('{NAME}', photoName);
                 setPhotoUrl(imgUrl);
             } else {
                 console.warn("No suitable photo found at expected index for location:", textQuery);

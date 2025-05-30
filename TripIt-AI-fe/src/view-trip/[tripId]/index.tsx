@@ -72,7 +72,7 @@ function ViewTrip() {
         // }
     }
     return (
-        <div className="p-4 md:p-8 lg:p-12">
+        <div className="p-4 md:p-8 lg:p-20">
             {loading ? (
                 // Display skeleton loaders while loading
                 <div className="flex flex-col gap-4">
