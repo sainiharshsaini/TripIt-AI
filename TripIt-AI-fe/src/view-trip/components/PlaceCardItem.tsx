@@ -1,22 +1,18 @@
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo, useCallback } from "react";
 import { GetPlaceDetails, PHOTO_REF_URL } from "@/service/GlobalApi";
 import { Star, Clock, MapPinned } from "lucide-react";
-import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
+
+const placePhotoCache = new Map<string, string | null>();
 
 function PlaceCardItem({ place }: any) {
     const [photoUrl, setPhotoUrl] = useState<string | null>(null);
 
-    useEffect(() => {
-        if (place?.placeName) {
-            GetPlacePhoto();
-        } else {
-            setPhotoUrl(null);
-        }
-    }, [place]);
+    console.log(photoUrl);
+    
 
-    const GetPlacePhoto = async () => {
+    const GetPlacePhoto = useCallback(async () => {
         const textQuery = place?.placeName;
 
         if (!textQuery) {
@@ -25,42 +21,41 @@ function PlaceCardItem({ place }: any) {
             return;
         }
 
+        // Check cache first
+        if (placePhotoCache.has(textQuery)) {
+            setPhotoUrl(placePhotoCache.get(textQuery)!);
+            return;
+        }
+
         try {
             const res = await GetPlaceDetails({ textQuery });
 
             const photoName = res?.data?.places?.[0]?.photos?.[3]?.name || res?.data?.places?.[0]?.photos?.[0]?.name;
+            let fetchedPhotoUrl: string | null = null;
 
             if (photoName) {
-                const imgUrl = PHOTO_REF_URL.replace('{NAME}', photoName);
-                setPhotoUrl(imgUrl);
+                fetchedPhotoUrl = PHOTO_REF_URL.replace('{NAME}', photoName);
             } else {
                 console.warn("No suitable photo found for place:", textQuery);
-                setPhotoUrl(null);
             }
+
+            setPhotoUrl(fetchedPhotoUrl);
+            // Store in cache
+            placePhotoCache.set(textQuery, fetchedPhotoUrl);
         } catch (error) {
             console.error("Error fetching place photo:", error);
             setPhotoUrl(null);
+            placePhotoCache.set(textQuery, null); // Cache null to avoid retrying failed fetches
         }
+    }, [place?.placeName]);
 
-        // await GetPlaceDetails(data)
-        //     .then(res => {
-        //         const imgUrl = PHOTO_REF_URL.replace('{NAME}', res.data.places[0].photos[3].name)
-        //         setPhotoUrl(imgUrl)
-        //     })
-    }
-
-    const rating = 4
-    const maxRating = 5;
-    const stars = Array.from({ length: maxRating }, (_, index) => {
-        const starValue = index + 1;
-        if (rating >= starValue) {
-            return <FaStar key={index} />;
-        } else if (rating > starValue - 1 && rating < starValue) {
-            return <FaStarHalfAlt key={index} />;
+    useEffect(() => {
+        if (place?.placeName) {
+            GetPlacePhoto();
         } else {
-            return <FaRegStar key={index} />;
+            setPhotoUrl(null);
         }
-    }
+    }, [place, GetPlacePhoto]); // Add GetPlacePhoto to dependency array
 
     const mapLink = 'https://www.google.com/maps/search/?api=1&query=' + place.placeName;
 
@@ -72,15 +67,9 @@ function PlaceCardItem({ place }: any) {
                         alt={`Image of ${place.placeName}`}
                         className="w-[150px] h-[150px] rounded-xl object-cover"
                     />
-                    <div className="flex flex-col justify-between flex-grow">
+                    <div className="flex flex-col justify-between flex-grow p-3">
                         <h2 className="font-bold text-lg">{place.placeName}</h2>
                         <p className="text-sm text-gray-500 line-clamp-2">{place.placeDetails}</p>
-                        {place.timeToTravel && (
-                            <h2 className="flex items-center gap-1 mt-3 text-gray-700">
-                                <Clock size={16} />
-                                {place.timeToTravel}
-                            </h2>
-                        )}
                         {place.ticketPricing && (
                             <h2 className="font-semibold">{place.ticketPricing}</h2>
                         )}
@@ -105,4 +94,6 @@ function PlaceCardItem({ place }: any) {
     )
 }
 
-export default PlaceCardItem
+export default memo(PlaceCardItem)
+
+// This is the most impactful change for performance if PlaceCardItem is re-rendered frequently by its parent (e.g., PlacesToVisit). Wrapping the component with React.memo will prevent it from re-rendering unless its place prop actually changes.

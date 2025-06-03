@@ -105,8 +105,8 @@ function CreateTrip() {
         const getUser = localStorage.getItem('user');
         const user: User | null = getUser ? JSON.parse(getUser) : null;
 
-        if (!user || !user.email) {
-            toast("User not logged in or email missing.");
+        if (!user) {
+            toast("User not logged in.");
             setLoading(false);
             return;
         }
@@ -116,7 +116,7 @@ function CreateTrip() {
         try {
             const parsedTripData = JSON.parse(TripData);
 
-            await setDoc(doc(db, "AiTrips", docId), {
+            await setDoc(doc(db, "TripItAITrips", docId), {
                 userSelection: formData,
                 tripData: parsedTripData,
                 userEmail: user.email,
@@ -131,8 +131,8 @@ function CreateTrip() {
         }
     }
 
-    const GetUserProfile = (tokenInfo: { access_token: string }) => {
-        axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${tokenInfo?.access_token}`, {
+    const GetUserProfile = async (tokenInfo: { access_token: string }) => {
+        await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${tokenInfo?.access_token}`, {
             headers: {
                 Authorization: `Bearer ${tokenInfo?.access_token}`,
                 Accept: 'Application/json'

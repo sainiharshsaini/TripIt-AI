@@ -1,3 +1,4 @@
+import { memo } from "react";
 import PlaceCardItem from "./PlaceCardItem"
 
 function PlacesToVisit({ trip }: any) {
@@ -39,4 +40,4 @@ function PlacesToVisit({ trip }: any) {
     )
 }
 
-export default PlacesToVisit
+export default memo(PlacesToVisit)

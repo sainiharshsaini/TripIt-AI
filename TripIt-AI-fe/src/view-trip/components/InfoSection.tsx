@@ -41,12 +41,6 @@ function InfoSection({ trip }: any) {
             console.error("Error fetching place photo:", error);
             setPhotoUrl(null);
         }
-
-        // await GetPlaceDetails(data)
-        //     .then(res => {
-        //         const imgUrl = PHOTO_REF_URL.replace('{NAME}', res.data.places[0].photos[3].name)
-        //         setPhotoUrl(imgUrl)
-        //     })
     }
 
     return (
