@@ -1,1 +1,1 @@
-{"root":["./src/index.ts"],"version":"5.8.3"}
+{"root":["./src/index.ts","./src/routes/generate.ts","./src/utils/gemini.ts"],"version":"5.8.3"}
