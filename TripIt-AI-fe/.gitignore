@@ -24,3 +24,5 @@ env
 *.njsproj
 *.sln
 *.sw?
+
+vercel.json
