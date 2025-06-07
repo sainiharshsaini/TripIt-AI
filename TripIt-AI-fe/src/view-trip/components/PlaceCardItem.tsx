@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom";
 import { useState, useEffect, memo, useCallback } from "react";
 import { GetPlaceDetails, PHOTO_REF_URL } from "@/service/GlobalApi";
-import { Star, Clock, MapPinned } from "lucide-react";
+import { Star, MapPinned } from "lucide-react";
 
 const placePhotoCache = new Map<string, string | null>();
 

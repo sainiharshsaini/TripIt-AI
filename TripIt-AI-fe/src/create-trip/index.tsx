@@ -166,6 +166,7 @@ function CreateTrip() {
                         apiKey={import.meta.env.VITE_GOOGLE_PLACE_API_KEY}
                         selectProps={{
                             value: place,
+                            // @ts-ignore
                             onChange: (value) => { setPlace(value); handleInputChange('location', value) }
                         }}
                     />

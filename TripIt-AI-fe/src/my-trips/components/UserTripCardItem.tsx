@@ -2,7 +2,23 @@ import { useState, useEffect } from "react";
 import { GetPlaceDetails, PHOTO_REF_URL } from "@/service/GlobalApi";
 import { Link } from "react-router-dom";
 
-function UserTripCardItem({ trip, key }) {
+interface Trip {
+    id: string;
+    userSelection: {
+        location: {
+            label: string;
+        };
+        noOfDays: number;
+        budget: string;
+    }
+}
+
+interface UserTripCardItemProps {
+    trip: Trip;
+    key?: React.Key
+}
+
+function UserTripCardItem({ trip }: UserTripCardItemProps) {
     const [photoUrl, setPhotoUrl] = useState<string | null>(null);
 
     useEffect(() => {
@@ -34,11 +50,6 @@ function UserTripCardItem({ trip, key }) {
                 console.warn("No photo found at expected index for location:", textQuery);
                 setPhotoUrl(null);
             }
-            // await GetPlaceDetails(data)
-            // .then((res) => {
-            //     const imgUrl = PHOTO_REF_URL.replace('{NAME}', res.data.places[0].photos[3].name)
-            //     setPhotoUrl(imgUrl)
-            // })
         } catch (error) {
             console.error("Error fetching place photo:", error);
             setPhotoUrl(null);
