@@ -40,6 +40,8 @@ function CreateTrip() {
     const [openDialog, setOpenDialog] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
 
+    const backendUrl = import.meta.env.VITE_TRIPIT_BACKEND_URL;
+
     const navigate = useNavigate();
 
     const handleInputChange = (name: keyof FormData, value: string) => {
@@ -88,7 +90,7 @@ function CreateTrip() {
         console.log(FINAL_PROMPT);
 
         try {
-            const result = await axios.post('http://localhost:3000/api/generate', { prompt: FINAL_PROMPT })
+            const result = await axios.post(`${backendUrl}/api/generate`, { prompt: FINAL_PROMPT })
             console.log(result.data.trip);
             setLoading(false);
             SaveAiTrip(result?.data?.trip)
