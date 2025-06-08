@@ -90,7 +90,7 @@ function CreateTrip() {
         console.log(FINAL_PROMPT);
 
         try {
-            const result = await axios.post(`${backendUrl}/api/generate`, { prompt: FINAL_PROMPT })
+            const result = await axios.post(`${backendUrl}api/generate`, { prompt: FINAL_PROMPT })
             console.log(result.data.trip);
             setLoading(false);
             SaveAiTrip(result?.data?.trip)
