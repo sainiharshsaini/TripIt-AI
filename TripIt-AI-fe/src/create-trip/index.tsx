@@ -9,7 +9,8 @@ import {
     Dialog,
     DialogContent,
     DialogDescription,
-    DialogHeader
+    DialogHeader,
+    DialogTitle
 } from "@/components/ui/dialog"
 import { FcGoogle } from "react-icons/fc";
 import { useGoogleLogin } from '@react-oauth/google';
@@ -57,7 +58,7 @@ function CreateTrip() {
 
     const login = useGoogleLogin({
         onSuccess: (codeRes) => GetUserProfile(codeRes),
-        onError: (error) => console.log(error)
+        onError: (error) => console.error(error)
     })
 
     const OnGenerateTrip = async () => {
@@ -93,7 +94,7 @@ function CreateTrip() {
             const result = await axios.post(`${backendUrl}/api/generate`, { prompt: FINAL_PROMPT })
             console.log(result.data.trip);
             setLoading(false);
-            SaveAiTrip(result?.data?.trip)  
+            SaveAiTrip(result?.data?.trip)
 
         } catch (error) {
             console.error("Error sending message:", error);
@@ -156,10 +157,10 @@ function CreateTrip() {
             <h2 className='font-bold text-3xl'>
                 Tell us your travel preferences 🏕️🌴
             </h2>
-            <p className='mt-3 text-gray-500 text-xl'>
+            <p className='mt-4 text-gray-500 text-lg'>
                 Just provide some basic information and our trip planner will generate a customized itinerary based on your preferences.
             </p>
-            <div className='mt-20 flex flex-col gap-10'>
+            <div className='mt-16 flex flex-col gap-10'>
                 <div>
                     <h2 className='text-xl my-3 font-medium'>
                         What is destination of choice?
@@ -187,9 +188,9 @@ function CreateTrip() {
 
                 <div>
                     <h2 className='text-xl my-3 font-medium'>
-                        What is destination of choice?
+                        Select your Hotels Type for Trip?
                     </h2>
-                    <div className='grid grid-cols-3 gap-5 mt-5'>
+                    <div className='grid grid-cols-1 md:grid-cols-3 gap-5 mt-5'>
                         {SelectBudgetOptions.map((item, index) => (
                             <div
                                 key={index}
@@ -208,7 +209,7 @@ function CreateTrip() {
                     <h2 className='text-xl my-3 font-medium'>
                         Who do you plan on traveling with on your next adventure?
                     </h2>
-                    <div className='grid grid-cols-3 gap-5 mt-5'>
+                    <div className='grid grid-cols-1 md:grid-cols-3 gap-5 mt-5'>
                         {SelectTravelesList.map((item, index) => (
                             <div
                                 key={index}
@@ -224,25 +225,41 @@ function CreateTrip() {
                 </div>
             </div>
             <div className='my-10 flex justify-end'>
-                <Button disabled={loading} onClick={OnGenerateTrip}>
-                    {loading ? <AiOutlineLoading3Quarters className='h-7 w-7 animate-spin' /> : "Generate Trip"}
+                <Button disabled={loading} onClick={OnGenerateTrip}
+                className=" px-8 py-4 rounded-full text-lg
+          bg-gradient-to-br from-yellow-400 to-orange-500
+          text-white font-bold
+          shadow-xl hover:shadow-2xl
+          transform hover:-translate-y-1 transition-all duration-300 ease-out
+          focus-visible:ring-4 focus-visible:ring-orange-400 focus-visible:ring-opacity-70
+          flex items-center justify-center gap-2
+          disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none
+        ">
+                    {loading ? <>
+                        <AiOutlineLoading3Quarters className='h-7 w-7 animate-spin mr-2' /> 
+                        Generating...
+                    </> : "Generate Trip"}
                 </Button>
             </div>
 
-            <Dialog open={openDialog}>
-                <DialogContent>
+            {/* Sign In Dialog */}
+            <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+                <DialogContent className="sm:max-w-md p-6 bg-white rounded-lg shadow-xl text-center">
                     <DialogHeader>
-                        <DialogDescription>
-                            <img src="/logo.svg" alt="logo" />
-                            <h2 className='font-bold text-lg mt-7'>Sign In With Google</h2>
-                            <p>Sign into the App with Google Authentication securely</p>
-                            <Button className='w-full mt-5 flex gap-4 items-center'
-                                onClick={() => login()}>
-                                <FcGoogle className='h-7 w-7' />
-                                Sign In With Google
-                            </Button>
+                        <img src="/TripIt-AI-logo.png" alt="logo" height={80} width={80} className="mx-auto my-4" />
+                        <DialogTitle className='font-bold text-2xl text-gray-800 mb-2'>Welcome to TripIt-AI!</DialogTitle>
+                        <DialogDescription className='text-gray-600 mb-6'>
+                            Plan your perfect trips effortlessly. Sign in with Google to get started.
                         </DialogDescription>
                     </DialogHeader>
+                    <Button className='w-full flex items-center cursor-pointer justify-center gap-3 py-3 text-md rounded-full bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors duration-300 shadow-md'
+                        onClick={() => login()}>
+                        <FcGoogle className='h-7 w-7' />
+                        Sign In with Google
+                    </Button>
+                    <p className="text-xs text-gray-400 mt-4">
+                        By signing in, you agree to our <a href="#" className="underline hover:text-blue-500">Terms of Service</a> and <a href="#" className="underline hover:text-blue-500">Privacy Policy</a>.
+                    </p>
                 </DialogContent>
             </Dialog>
         </div>

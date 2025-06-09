@@ -14,7 +14,7 @@ function PlacesToVisit({ trip }: any) {
     }
 
     return (
-        <div className="mt-10 p-5 bg-white rounded-lg shadow-sm">
+        <div className="mt-10 md:p-5 bg-white md:rounded-lg md:shadow-sm">
             <h2 className="font-bold text-lg mb-4">Places to visit</h2>
 
             <div>

@@ -44,7 +44,7 @@ function InfoSection({ trip }: any) {
     }
 
     return (
-        <div className='p-5 md:p-10 lg:p-16 xl:p-20'>
+        <div className='md:p-10 lg:p-16 xl:p-20'>
             <img src={photoUrl || '/placeholder.jpg'}
                 alt={`Image for ${trip?.userSelection?.location?.label || 'trip destination'}`}
                 className='h-[340px] w-full object-cover rounded-xl shadow-md'

@@ -52,7 +52,7 @@ function HotelCardItem({ hotel }: any) {
 
     return (
         <Link to={mapLink} target="_blank" rel="noopener noreferrer">
-            <div className="hover:scale-103 transition-all cursor-pointer rounded-xl shadow-sm overflow-hidden">
+            <div className="hover:scale-103 transition-all cursor-pointer rounded-xl shadow-sm hover:shadow-md overflow-hidden">
                 <img src={photoUrl || '/placeholder.jpg'}
                     alt={`Image of ${hotel?.hotelName || 'hotel'}`}
                     className="rounded-t-xl h-[200px] w-full object-cover"
