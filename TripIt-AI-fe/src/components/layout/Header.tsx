@@ -178,7 +178,7 @@ function Header() {
                         onClick={() => setIsMobileMenuOpen(false)} // Close when clicking outside
                     >
                         <motion.nav
-                            className='fixed top-18 right-0 w-3/5 bg-white shadow-xl p-6 flex flex-col gap-4 overflow-y-auto'
+                            className='fixed top-18 right-0 w-3/5 rounded-b-md bg-white shadow-xl p-6 flex flex-col gap-4 overflow-y-auto'
                             variants={menuVariants}
                             initial="hidden"
                             animate="visible"
