@@ -93,7 +93,7 @@ function CreateTrip() {
             const result = await axios.post(`${backendUrl}/api/generate`, { prompt: FINAL_PROMPT })
             console.log(result.data.trip);
             setLoading(false);
-            SaveAiTrip(result?.data?.trip)
+            SaveAiTrip(result?.data?.trip)  
 
         } catch (error) {
             console.error("Error sending message:", error);
