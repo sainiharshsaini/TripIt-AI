@@ -15,9 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const gemini_1 = require("../utils/gemini");
 const router = express_1.default.Router();
-router.post('/generate', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/generate', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { prompt } = req.body;
-    console.log("backend " + prompt);
     if (!prompt) {
         res.status(400).json({ error: "Prompt is required" });
         return;
@@ -27,8 +26,7 @@ router.post('/generate', (req, res) => __awaiter(void 0, void 0, void 0, functio
         res.status(200).json({ trip });
     }
     catch (error) {
-        console.error('Error generating trip:', error);
-        res.status(500).json({ error: 'Failed to generate trip' });
+        next(error);
     }
 }));
 exports.default = router;

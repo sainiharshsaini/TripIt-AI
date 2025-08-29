@@ -1,29 +1,13 @@
 import { memo } from "react";
 import PlaceCardItem from "./PlaceCardItem";
-
-interface Place {
-    timeTravel?: string;
-    // add other place properties as needed
-    [key: string]: any;
-}
-
-interface ItineraryDay {
-    day: string;
-    plan: Place[];
-}
-
-interface TripData {
-    travelPlan?: {
-        itinerary?: ItineraryDay[];
-    };
-}
+import type { TripData, ItineraryDay, Place } from "@/lib/types";
 
 interface PlacesToVisitProps {
     trip?: TripData | null;
 }
 
 function PlacesToVisit({ trip }: PlacesToVisitProps) {
-    const itinerary = trip?.travelPlan?.itinerary ?? [];
+    const itinerary: ItineraryDay[] = trip?.tripData.travelPlan?.itinerary ?? [];
 
     if (itinerary.length === 0) {
         return (
@@ -48,12 +32,14 @@ function PlacesToVisit({ trip }: PlacesToVisitProps) {
 
             <div>
                 {itinerary.map((item, idx) => (
-                    <div key={item.day ?? idx} className="mt-5 border-b pb-4 last:border-b-0">
-                        <h2 className="font-medium text-xl mb-3 text-primary-500">
-                            {item.day}
-                        </h2>
+                    <div
+                        key={item.day ?? idx}
+                        className="mt-5 border-b pb-4 last:border-b-0"
+                        aria-label={`Day ${item.day}`}
+                    >
+                        <h2 className="font-medium text-xl mb-3 text-primary-500">{item.day}</h2>
                         <div className="grid md:grid-cols-2 gap-5">
-                            {item.plan.map((place, index2) => (
+                            {item.plan.map((place: Place, index2) => (
                                 <div key={index2} className="flex flex-col">
                                     {place.timeTravel && (
                                         <h3 className="font-medium text-sm text-orange-600 mb-1">

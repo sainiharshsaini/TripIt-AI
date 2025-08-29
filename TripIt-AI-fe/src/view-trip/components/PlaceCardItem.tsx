@@ -3,13 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { getPlaceDetails, getPhotoRefUrl } from "@/service/GlobalApi";
 import { Star, MapPinned } from "lucide-react";
-
-interface Place {
-    placeName: string;
-    placeDetails?: string;
-    ticketPricing?: string;
-    rating?: number;
-}
+import type { Place } from "@/lib/types";
 
 interface PlaceCardItemProps {
     place: Place;
@@ -29,7 +23,6 @@ function PlaceCardItem({ place }: PlaceCardItemProps) {
             return;
         }
 
-        // Return cached photo if available
         if (placePhotoCache.has(textQuery)) {
             setPhotoUrl(placePhotoCache.get(textQuery)!);
             return;

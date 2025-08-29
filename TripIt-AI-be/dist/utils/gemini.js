@@ -21,13 +21,19 @@ const genai_1 = require("@google/genai");
 function generateTripPlan(prompt) {
     return __awaiter(this, void 0, void 0, function* () {
         var _a, e_1, _b, _c;
+        if (!prompt || prompt.trim() === '') {
+            throw new Error('Prompt is required');
+        }
+        if (!process.env.GOOGLE_GEMINI_AI_API_KEY) {
+            throw new Error('Missing Google Gemini AI API key');
+        }
         const ai = new genai_1.GoogleGenAI({
             apiKey: process.env.GOOGLE_GEMINI_AI_API_KEY,
         });
         const config = {
             responseMimeType: 'application/json',
         };
-        const model = 'gemini-1.5-flash';
+        const model = 'gemini-2.5-flash';
         const contents = [
             {
                 role: 'user',
@@ -38,29 +44,36 @@ function generateTripPlan(prompt) {
                 ],
             },
         ];
-        const response = yield ai.models.generateContentStream({
-            model,
-            config,
-            contents,
-        });
-        let fullText = '';
         try {
-            for (var _d = true, response_1 = __asyncValues(response), response_1_1; response_1_1 = yield response_1.next(), _a = response_1_1.done, !_a; _d = true) {
-                _c = response_1_1.value;
-                _d = false;
-                const chunk = _c;
-                if (chunk.text) {
-                    fullText += chunk.text;
+            const response = yield ai.models.generateContentStream({
+                model,
+                config,
+                contents,
+            });
+            let fullText = '';
+            try {
+                for (var _d = true, response_1 = __asyncValues(response), response_1_1; response_1_1 = yield response_1.next(), _a = response_1_1.done, !_a; _d = true) {
+                    _c = response_1_1.value;
+                    _d = false;
+                    const chunk = _c;
+                    if (chunk.text) {
+                        fullText += chunk.text;
+                    }
                 }
             }
-        }
-        catch (e_1_1) { e_1 = { error: e_1_1 }; }
-        finally {
-            try {
-                if (!_d && !_a && (_b = response_1.return)) yield _b.call(response_1);
+            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            finally {
+                try {
+                    if (!_d && !_a && (_b = response_1.return)) yield _b.call(response_1);
+                }
+                finally { if (e_1) throw e_1.error; }
             }
-            finally { if (e_1) throw e_1.error; }
+            return fullText;
         }
-        return fullText;
+        catch (error) {
+            console.error('Error in generateTripPlan:', error);
+            // Wrap or rethrow so caller can handle errors gracefully
+            throw new Error('Failed to generate trip plan. Please try again later.');
+        }
     });
 }

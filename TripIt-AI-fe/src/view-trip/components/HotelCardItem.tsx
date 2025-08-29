@@ -8,11 +8,14 @@ interface Hotel {
     imageUrl?: string;
     price?: string;
     rating?: number;
+    [key: string]: any;
 }
 
 interface HotelCardItemProps {
     hotel: Hotel;
 }
+
+const placePhotoCache = new Map<string, string | null>();
 
 function HotelCardItem({ hotel }: HotelCardItemProps) {
     const [photoUrl, setPhotoUrl] = useState<string | null>(null);
@@ -26,22 +29,31 @@ function HotelCardItem({ hotel }: HotelCardItemProps) {
             return;
         }
 
+        if (placePhotoCache.has(textQuery)) {
+            setPhotoUrl(placePhotoCache.get(textQuery)!);
+            return;
+        }
+
         try {
             const res = await getPlaceDetails({ textQuery });
 
             const photos = res?.data?.places?.[0]?.photos;
             const photoName = photos && photos.length > 3 ? photos[3].name : photos?.[0]?.name;
 
+            let fetchedPhotoUrl: string | null = null;
+
             if (photoName) {
-                const imgUrl = getPhotoRefUrl(photoName);
-                setPhotoUrl(imgUrl);
+                fetchedPhotoUrl = getPhotoRefUrl(photoName);
             } else {
                 console.warn("No suitable photo found for hotel:", textQuery);
-                setPhotoUrl(null);
             }
+
+            setPhotoUrl(fetchedPhotoUrl);
+            placePhotoCache.set(textQuery, fetchedPhotoUrl);
         } catch (error) {
             console.error("Error fetching hotel photo:", error);
             setPhotoUrl(null);
+            placePhotoCache.set(textQuery, null);
         }
     }, [hotel]);
 

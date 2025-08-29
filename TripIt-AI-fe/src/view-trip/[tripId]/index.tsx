@@ -6,13 +6,7 @@ import Hotels from "../components/Hotels";
 import PlacesToVisit from "../components/PlacesToVisit";
 import { useState, useEffect, useCallback } from "react";
 import { db } from "@/service/firebaseConfig";
-
-interface TripData {
-    id: string;
-    userEmail: string;
-    userSelection: any;
-    tripData: any;
-}
+import type { TripData } from "@/lib/types";
 
 function ViewTrip() {
     const { tripId } = useParams<{ tripId: string }>();
@@ -25,9 +19,8 @@ function ViewTrip() {
             setLoading(true);
             setError(null);
 
-            const docRef = doc(db, "TripItAITrips", currentTripId);
-
             try {
+                const docRef = doc(db, "TripItAITrips", currentTripId);
                 const docSnap = await getDoc(docRef);
 
                 if (docSnap.exists()) {
@@ -45,7 +38,6 @@ function ViewTrip() {
                     setError("No trip found with this ID.");
                 }
             } catch (err) {
-                console.error("Error fetching trip data:", err);
                 toast.error("Failed to load trip data. Please try again.");
                 setTrip(null);
                 setError("Failed to load trip data. Please try again.");
@@ -67,7 +59,9 @@ function ViewTrip() {
     }, [tripId, getTripData]);
 
     if (error) {
-        return <div className="text-center p-4 text-red-500">Error: {error}</div>;
+        return <div className="text-center p-4 text-red-500">
+            Error: {error}
+        </div>;
     }
 
     return (
