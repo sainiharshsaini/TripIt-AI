@@ -6,7 +6,7 @@ function NotFound() {
     const navigate = useNavigate();
 
     const handleGoBack = () => {
-        navigate(-1); // Navigates one step back in the browser history
+        navigate(-1);
     };
 
     const handleGoHome = () => {
@@ -15,7 +15,7 @@ function NotFound() {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
-            {/* Container for the 404 content, with rounded corners and shadow */}
+
             <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 lg:p-16 text-center max-w-lg w-full">
                 <div className="mb-8 flex justify-center">
                     <svg className="w-48 h-48 text-orange-500 animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -23,32 +23,27 @@ function NotFound() {
                         <path d="M16 16s-1.5-2-4-2-4 2-4 2"></path>
                         <line x1="9" y1="9" x2="9.01" y2="9"></line>
                         <line x1="15" y1="9" x2="15.01" y2="9"></line>
-                        <path d="M9 16h6"></path> {/* Mouth becomes a straight line for "not found" */}
-                        <path d="M12 2v2"></path> {/* Top antenna */}
-                        <path d="M4.22 4.22l1.42 1.42"></path> {/* Top-left antenna */}
-                        <path d="M18.36 5.64l1.42-1.42"></path> {/* Top-right antenna */}
+                        <path d="M9 16h6"></path>
+                        <path d="M12 2v2"></path>
+                        <path d="M4.22 4.22l1.42 1.42"></path>
+                        <path d="M18.36 5.64l1.42-1.42"></path>
                     </svg>
                 </div>
 
-
-                {/* Main Heading */}
                 <h1 className="text-6xl md:text-7xl lg:text-8xl font-extrabold text-gray-800 mb-4 tracking-tight">
                     404
                 </h1>
 
-                {/* Subheading */}
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-700 mb-6">
                     Page Not Found
                 </h2>
 
-                {/* Informative Message */}
                 <p className="text-gray-500 text-lg mb-10 leading-relaxed">
                     Oops! It looks like you've stumbled upon a page that doesn't exist.
                     The page you are looking for might have been removed, had its name changed,
                     or is temporarily unavailable.
                 </p>
 
-                {/* Navigation Buttons */}
                 <div className="flex flex-col sm:flex-row justify-center gap-4">
                     <Button
                         onClick={handleGoHome}

@@ -1,43 +1,74 @@
 import { memo } from "react";
-import PlaceCardItem from "./PlaceCardItem"
+import PlaceCardItem from "./PlaceCardItem";
 
-function PlacesToVisit({ trip }: any) {
+interface Place {
+    timeTravel?: string;
+    // add other place properties as needed
+    [key: string]: any;
+}
 
-    if (!trip || !trip.tripData || !trip.tripData.travelPlan || !trip.tripData.travelPlan.itinerary) {
-        // You can return a loading state, a message, or null/empty div
+interface ItineraryDay {
+    day: string;
+    plan: Place[];
+}
+
+interface TripData {
+    travelPlan?: {
+        itinerary?: ItineraryDay[];
+    };
+}
+
+interface PlacesToVisitProps {
+    trip?: TripData | null;
+}
+
+function PlacesToVisit({ trip }: PlacesToVisitProps) {
+    const itinerary = trip?.travelPlan?.itinerary ?? [];
+
+    if (itinerary.length === 0) {
         return (
-            <div className="mt-10 p-5 bg-white rounded-lg shadow-sm">
+            <section
+                className="mt-10 p-5 bg-white rounded-lg shadow-sm"
+                aria-label="Places to Visit"
+            >
                 <h2 className="font-bold text-lg mb-4">Places to Visit</h2>
-                <p className="text-gray-500 text-center">No detailed itinerary available for this trip yet.</p>
-            </div>
+                <p className="text-gray-500 text-center">
+                    No detailed itinerary available for this trip yet.
+                </p>
+            </section>
         );
     }
 
     return (
-        <div className="mt-10 md:p-5 bg-white md:rounded-lg md:shadow-sm">
+        <section
+            className="mt-10 md:p-5 bg-white md:rounded-lg md:shadow-sm"
+            aria-label="Places to Visit"
+        >
             <h2 className="font-bold text-lg mb-4">Places to visit</h2>
 
             <div>
-                {trip?.tripData.travelPlan.itinerary.map((item: any, index: number) => (
-                    <div key={index} className="mt-5 border-b pb-4 last:border-b-0">
-                        <h2 className="font-medium text-xl mb-3 text-primary-500">{item?.day}</h2>
+                {itinerary.map((item, idx) => (
+                    <div key={item.day ?? idx} className="mt-5 border-b pb-4 last:border-b-0">
+                        <h2 className="font-medium text-xl mb-3 text-primary-500">
+                            {item.day}
+                        </h2>
                         <div className="grid md:grid-cols-2 gap-5">
-                            {item.plan.map((place: any, index2: number) => (
+                            {item.plan.map((place, index2) => (
                                 <div key={index2} className="flex flex-col">
                                     {place.timeTravel && (
-                                        <h2 className="font-medium text-sm text-orange-600 mb-1">
+                                        <h3 className="font-medium text-sm text-orange-600 mb-1">
                                             {place.timeTravel}
-                                        </h2>
+                                        </h3>
                                     )}
-                                    <PlaceCardItem place={place} key={index2} />
+                                    <PlaceCardItem place={place} />
                                 </div>
                             ))}
                         </div>
                     </div>
                 ))}
             </div>
-        </div>
-    )
+        </section>
+    );
 }
 
-export default memo(PlacesToVisit)
+export default memo(PlacesToVisit);

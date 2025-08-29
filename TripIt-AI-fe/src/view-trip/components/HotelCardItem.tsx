@@ -1,21 +1,23 @@
-import { Link } from "react-router-dom"
-import { useState, useEffect } from "react";
-import { GetPlaceDetails, PHOTO_REF_URL } from "@/service/GlobalApi";
+import { Link } from "react-router-dom";
+import { useState, useEffect, useCallback } from "react";
+import { getPlaceDetails, getPhotoRefUrl } from "@/service/GlobalApi";
 
-function HotelCardItem({ hotel }: any) {
+interface Hotel {
+    hotelName?: string;
+    hotelAddress?: string;
+    imageUrl?: string;
+    price?: string;
+    rating?: number;
+}
+
+interface HotelCardItemProps {
+    hotel: Hotel;
+}
+
+function HotelCardItem({ hotel }: HotelCardItemProps) {
     const [photoUrl, setPhotoUrl] = useState<string | null>(null);
 
-    useEffect(() => {
-        if (hotel?.imageUrl) {
-            setPhotoUrl(hotel.imageUrl);
-        } else if (hotel?.hotelName) {
-            GetHotelPhoto();
-        } else {
-            setPhotoUrl(null);
-        }
-    }, [hotel]);
-
-    const GetHotelPhoto = async () => {
+    const getHotelPhoto = useCallback(async () => {
         const textQuery = hotel?.hotelName;
 
         if (!textQuery) {
@@ -25,12 +27,13 @@ function HotelCardItem({ hotel }: any) {
         }
 
         try {
-            const res = await GetPlaceDetails({ textQuery });
+            const res = await getPlaceDetails({ textQuery });
 
-            const photoName = res?.data?.places?.[0]?.photos?.[3]?.name || res?.data?.places?.[0]?.photos?.[0]?.name
+            const photos = res?.data?.places?.[0]?.photos;
+            const photoName = photos && photos.length > 3 ? photos[3].name : photos?.[0]?.name;
 
             if (photoName) {
-                const imgUrl = PHOTO_REF_URL.replace('{NAME}', photoName);
+                const imgUrl = getPhotoRefUrl(photoName);
                 setPhotoUrl(imgUrl);
             } else {
                 console.warn("No suitable photo found for hotel:", textQuery);
@@ -40,34 +43,43 @@ function HotelCardItem({ hotel }: any) {
             console.error("Error fetching hotel photo:", error);
             setPhotoUrl(null);
         }
+    }, [hotel]);
 
-        // await GetPlaceDetails(data)
-        //     .then((res) => {
-        //         const imgUrl = PHOTO_REF_URL.replace('{NAME}', res.data.places[0].photos[3].name)
-        //         setPhotoUrl(imgUrl)
-        //     })
-    }
+    useEffect(() => {
+        if (hotel?.imageUrl) {
+            setPhotoUrl(hotel.imageUrl);
+        } else if (hotel?.hotelName) {
+            getHotelPhoto();
+        } else {
+            setPhotoUrl(null);
+        }
+    }, [hotel, getHotelPhoto]);
 
-    const mapLink = `https://www.google.com/maps/search/?api=1&query=` + (hotel?.hotelName || '') + "," + (hotel?.hotelAddress || '');
+    const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+        `${hotel?.hotelName || ""}, ${hotel?.hotelAddress || ""}`
+    )}`;
 
     return (
-        <Link to={mapLink} target="_blank" rel="noopener noreferrer">
-            <div className="hover:scale-103 transition-all cursor-pointer rounded-xl shadow-sm hover:shadow-md overflow-hidden">
-                <img src={photoUrl || '/placeholder.jpg'}
-                    alt={`Image of ${hotel?.hotelName || 'hotel'}`}
+        <Link to={mapLink} target="_blank" rel="noopener noreferrer" aria-label={`Open map for ${hotel?.hotelName || "hotel"}`}>
+            <div className="hover:scale-105 transition-all cursor-pointer rounded-xl shadow-sm hover:shadow-md overflow-hidden">
+                <img
+                    src={photoUrl || "/placeholder.jpg"}
+                    alt={`Image of ${hotel?.hotelName || "hotel"}`}
                     className="rounded-t-xl h-[200px] w-full object-cover"
+                    loading="lazy"
+                    decoding="async"
                 />
                 <div className="p-3 flex flex-col gap-1">
-                    <h2 className="font-medium text-lg truncate">{hotel?.hotelName || 'Unknown Hotel'}</h2>
-                    <h2 className="text-xs text-gray-500 line-clamp-1">📍 {hotel?.hotelAddress || 'No Address'}</h2>
-                    <h2 className="text-sm font-semibold">💰 {hotel?.price || 'Price N/A'}</h2>
-                    {hotel?.rating && (
-                        <h2 className="text-sm text-gray-700">⭐ {hotel.rating}</h2>
+                    <h2 className="font-medium text-lg truncate">{hotel?.hotelName || "Unknown Hotel"}</h2>
+                    <p className="text-xs text-gray-500 line-clamp-1">📍 {hotel?.hotelAddress || "No Address"}</p>
+                    <p className="text-sm font-semibold">💰 {hotel?.price || "Price N/A"}</p>
+                    {hotel?.rating !== undefined && (
+                        <p className="text-sm text-gray-700">⭐ {hotel.rating}</p>
                     )}
                 </div>
             </div>
         </Link>
-    )
+    );
 }
 
-export default HotelCardItem
+export default HotelCardItem;

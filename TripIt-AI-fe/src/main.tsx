@@ -17,22 +17,10 @@ const router = createBrowserRouter([
     element: <Layout />,
     errorElement: <NotFound />,
     children: [
-      {
-        index: true,
-        element: <App />
-      },
-      {
-        path: '/create-trip',
-        element: <CreateTrip />
-      },
-      {
-        path: '/view-trip/:tripId',
-        element: <ViewTrip />
-      },
-      {
-        path: '/my-trips',
-        element: <MyTrips />
-      }
+      { index: true, element: <App /> },
+      { path: '/create-trip', element: <CreateTrip /> },
+      { path: '/view-trip/:tripId', element: <ViewTrip /> },
+      { path: '/my-trips', element: <MyTrips /> }
     ]
   }
 ])
