@@ -33,7 +33,7 @@ function generateTripPlan(prompt) {
         const config = {
             responseMimeType: 'application/json',
         };
-        const model = 'gemini-2.5-flash';
+        const model = 'gemini-1.5-flash';
         const contents = [
             {
                 role: 'user',
@@ -72,7 +72,6 @@ function generateTripPlan(prompt) {
         }
         catch (error) {
             console.error('Error in generateTripPlan:', error);
-            // Wrap or rethrow so caller can handle errors gracefully
             throw new Error('Failed to generate trip plan. Please try again later.');
         }
     });

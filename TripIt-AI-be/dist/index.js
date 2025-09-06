@@ -33,14 +33,11 @@ app.use((0, helmet_1.default)());
 app.use((0, compression_1.default)());
 app.use(express_1.default.json());
 app.use((0, morgan_1.default)('combined'));
-// Routes
 app.use('/api', generate_1.default);
-// Centralized error handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ error: 'Internal Server Error' });
 });
-// Start server
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
     console.log(`Backend server running on port ${port}`);
