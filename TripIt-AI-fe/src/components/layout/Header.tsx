@@ -36,11 +36,9 @@ function Header() {
     const [openDialog, setOpenDialog] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    // Retrieve user from localStorage - ideally, lift to context or global state management for real apps
     const rawUser = localStorage.getItem('user');
     const user: User | null = rawUser ? JSON.parse(rawUser) : null;
 
-    // Memoize login handler to avoid recreation on every render
     const fetchUserProfile = useCallback(async (token: string) => {
         try {
             const res = await axios.get('https://www.googleapis.com/oauth2/v1/userinfo', {
@@ -49,7 +47,6 @@ function Header() {
             });
             localStorage.setItem('user', JSON.stringify(res.data));
             setOpenDialog(false);
-            // Ideally, update state or context here instead of reload
             window.location.reload();
         } catch (error) {
             console.error('Error fetching user profile:', error);
@@ -64,7 +61,6 @@ function Header() {
     const handleLogout = useCallback(() => {
         googleLogout();
         localStorage.clear();
-        // Ideally, update state or context here instead of reload
         window.location.reload();
     }, []);
 
@@ -76,14 +72,13 @@ function Header() {
 
     return (
         <header className="sticky top-0 z-50 w-full bg-opacity-95 backdrop-blur-3xl flex justify-between items-center shadow-sm py-4 px-5 md:px-10 lg:px-20">
-            {/* Logo and Home Link */}
+
             <Link to="/" className="flex items-center gap-2 group">
                 <span className="text-4xl font-extrabold bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600 text-transparent bg-clip-text transition-all duration-300 group-hover:scale-105 group-hover:from-red-600 group-hover:to-yellow-400">
                     TripIt-AI
                 </span>
             </Link>
 
-            {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-5">
                 {user ? (
                     <>
@@ -117,7 +112,6 @@ function Header() {
                 )}
             </nav>
 
-            {/* Mobile Header Actions */}
             <div className="flex md:hidden items-center gap-4">
                 {user && (
                     <Popover>
@@ -152,7 +146,6 @@ function Header() {
                 )}
             </div>
 
-            {/* Mobile Menu Drawer */}
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <motion.div
@@ -197,7 +190,6 @@ function Header() {
                 )}
             </AnimatePresence>
 
-            {/* Sign In Dialog */}
             <Dialog open={openDialog} onOpenChange={setOpenDialog}>
                 <DialogContent className="sm:max-w-md p-6 bg-white rounded-lg shadow-xl text-center">
                     <DialogHeader>

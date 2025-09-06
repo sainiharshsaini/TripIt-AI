@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import UserTripCardItem from "./components/UserTripCardItem";
 import { db } from "@/service/firebaseConfig";
 
-// Interface for the user object from localStorage
 interface User {
     id: string;
     name: string;
@@ -12,7 +11,6 @@ interface User {
     picture: string;
 }
 
-// Type for trip object
 interface Trip {
     id: string;
     userEmail: string;
@@ -31,7 +29,6 @@ function MyTrips() {
             await GetUserTrips();
         };
         fetchTrips();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const GetUserTrips = async () => {
@@ -41,7 +38,7 @@ function MyTrips() {
         const getUser = localStorage.getItem("user");
         const user: User | null = getUser ? JSON.parse(getUser) : null;
 
-        console.log("Current User:", user);
+        // console.log("Current User:", user);
 
         if (!user) {
             console.log("User not found, navigating to home.");

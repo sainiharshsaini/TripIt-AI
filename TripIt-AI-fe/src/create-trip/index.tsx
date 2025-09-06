@@ -56,9 +56,9 @@ function CreateTrip() {
         }));
     };
 
-    useEffect(() => {
-        console.log(formData);
-    }, [formData]);
+    // useEffect(() => {
+    //     console.log(formData);
+    // }, [formData]);
 
     const login = useGoogleLogin({
         onSuccess: (codeRes) => GetUserProfile(codeRes),
@@ -94,11 +94,11 @@ function CreateTrip() {
             .replace("{budget}", formData.budget || "");
 
 
-        console.log(FINAL_PROMPT);
+        // console.log(FINAL_PROMPT);
 
         try {
             const result = await axios.post(`${backendUrl}/api/generate`, { prompt: FINAL_PROMPT });
-            console.log(result.data.trip);
+            // console.log(result.data.trip);
             SaveAiTrip(result.data.trip);
         } catch (error) {
             console.error("Error sending message:", error);
@@ -147,7 +147,7 @@ function CreateTrip() {
                     Accept: "application/json",
                 },
             });
-            console.log(res);
+            // console.log(res);
             localStorage.setItem("user", JSON.stringify(res.data));
             setOpenDialog(false);
             OnGenerateTrip();
@@ -160,7 +160,7 @@ function CreateTrip() {
 
     return (
         <div className="sm:px-10 md:px-32 lg:px-56 xl:px-70 px-5 mt-20">
-            <h2 className="font-bold text-3xl">Tell us your travel preferences 🏕️🌴</h2>
+            <h2 className="font-bold text-3xl">Tell us your travel preferences</h2>
             <p className="mt-4 text-gray-500 text-lg">
                 Just provide some basic information and our trip planner will generate a customized itinerary based on your preferences.
             </p>
@@ -243,7 +243,6 @@ function CreateTrip() {
                 </Button>
             </div>
 
-            {/* Sign In Dialog */}
             <Dialog open={openDialog} onOpenChange={setOpenDialog}>
                 <DialogContent className="sm:max-w-md p-6 bg-white rounded-lg shadow-xl text-center">
                     <DialogHeader>

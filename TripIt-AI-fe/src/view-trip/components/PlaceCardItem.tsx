@@ -47,7 +47,7 @@ function PlaceCardItem({ place }: PlaceCardItemProps) {
         } catch (error) {
             console.error("Error fetching place photo:", error);
             setPhotoUrl(null);
-            placePhotoCache.set(textQuery, null); // Cache null to prevent retry spamming
+            placePhotoCache.set(textQuery, null);
         }
     }, [place.placeName]);
 

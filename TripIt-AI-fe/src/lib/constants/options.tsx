@@ -1,4 +1,3 @@
-// Traveler option interface for selection components
 export interface TravelerOption {
     id: number;
     title: string;
@@ -38,15 +37,13 @@ export const travelerOptions: TravelerOption[] = [
     },
 ];
 
-// Budget option interface for budget picker components
 export interface BudgetOption {
     id: number;
     title: string;
     desc: string;
-    icon: string; // Can hold emoji or icon code, keep empty string if none
+    icon: string;
 }
 
-// Budget options array
 export const budgetOptions: BudgetOption[] = [
     {
         id: 1,
@@ -68,7 +65,6 @@ export const budgetOptions: BudgetOption[] = [
     },
 ];
 
-// AI prompt for travel plan generation
 export const AI_PROMPT: string =
     `Generate a travel plan for Location: {location}, for {totalDays} days, for {traveler}, with a {budget} budget. 
 Give me a hotel options list with: Hotel name, address, price, hotel image URL, geo coordinates, rating, and descriptions.

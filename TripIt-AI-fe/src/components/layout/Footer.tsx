@@ -6,7 +6,7 @@ function Footer() {
     <footer className="bg-gray-900 text-white pt-12 pb-6 px-10 lg:px-20 mt-15" role="contentinfo">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-          {/* Brand Section */}
+
           <div>
             <div className="flex items-center space-x-2 mb-4">
               <Compass size={24} className="text-[#FF6347]" aria-hidden="true" />
@@ -51,7 +51,6 @@ function Footer() {
             </div>
           </div>
 
-          {/* Links Sections */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <nav aria-label="Quick access links">
               <h3 className="font-semibold text-lg mb-4">Quick Access</h3>

@@ -5,7 +5,6 @@ import Hero from './components/custom/Hero';
 import HowItWorks from './components/custom/HowItWorks';
 import Testimonials from './components/custom/Testimonials';
 
-// Use React.memo if components are pure and only re-render when props change
 const MemoizedFeatureCard = memo(FeatureCard);
 const MemoizedHero = memo(Hero);
 const MemoizedHowItWorks = memo(HowItWorks);

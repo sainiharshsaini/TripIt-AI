@@ -27,8 +27,7 @@ function UserTripCardItem({ trip }: UserTripCardItemProps) {
         } else {
             setPhotoUrl(null);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [trip.userSelection.location.label]); // More specific dependency avoids unnecessary calls
+    }, [trip.userSelection.location.label]);
 
     const getPlacePhoto = async () => {
         const textQuery = trip.userSelection.location.label;
@@ -42,7 +41,6 @@ function UserTripCardItem({ trip }: UserTripCardItemProps) {
         try {
             const res = await getPlaceDetails({ textQuery });
 
-            // Defensive: check if photos array exists and has at least 4 items
             const photoName =
                 res?.places?.[0]?.photos && res.places[0].photos.length > 3
                     ? res.places[0].photos[3].name
@@ -52,7 +50,6 @@ function UserTripCardItem({ trip }: UserTripCardItemProps) {
                 const imgUrl = getPhotoRefUrl(photoName);
                 setPhotoUrl(imgUrl);
             } else if (res?.places?.[0]?.photos && res.places[0].photos.length > 0) {
-                // fallback to first photo if 4th index doesn't exist
                 const fallbackPhotoName = res.places[0].photos[0].name;
                 const imgUrl = getPhotoRefUrl(fallbackPhotoName);
                 setPhotoUrl(imgUrl);

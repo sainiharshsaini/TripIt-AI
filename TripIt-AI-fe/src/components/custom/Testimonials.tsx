@@ -58,7 +58,6 @@ function Testimonials() {
               tabIndex={0}
               aria-label={`Testimonial from ${testimonial.name}`}
             >
-              {/* Star rating for screen readers */}
               <div className="flex space-x-1 mb-4" aria-label={`Rated ${testimonial.rating} out of 5`}>
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star

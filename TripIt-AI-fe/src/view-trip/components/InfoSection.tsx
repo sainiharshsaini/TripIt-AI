@@ -35,7 +35,6 @@ function InfoSection({ trip }: InfoSectionProps) {
 
             const place = res?.places?.[0];
             const photos = place?.photos;
-            // Use 4th photo if exists, otherwise fallback to first photo or null
             const photoName = photos && photos.length > 3 ? photos[3].name : photos?.[0]?.name;
 
             if (photoName) {
