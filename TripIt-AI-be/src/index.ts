@@ -33,16 +33,13 @@ app.use(compression());
 app.use(express.json());
 app.use(morgan('combined'));
 
-// Routes
 app.use('/api', generateRoute);
 
-// Centralized error handling middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Internal Server Error' });
 });
 
-// Start server
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
   console.log(`Backend server running on port ${port}`);

@@ -5,6 +5,7 @@ import { AI_PROMPT, budgetOptions, travelerOptions } from "@/lib/constants/optio
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { toast } from "sonner";
 import axios from "axios";
+
 import {
     Dialog,
     DialogContent,
@@ -91,6 +92,7 @@ function CreateTrip() {
             .replace(/{totalDays}/g, formData.noOfDays || "")
             .replace("{traveler}", formData.traveler || "")
             .replace("{budget}", formData.budget || "");
+
 
         console.log(FINAL_PROMPT);
 
