@@ -6,8 +6,8 @@
 .env.test.local
 
 # Node modules
-node_modules/
+node_modules
 
 # Build outputs
-dist/
-build/
+dist
+build
