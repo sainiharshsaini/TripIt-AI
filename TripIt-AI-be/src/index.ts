@@ -1,9 +1,6 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import compression from 'compression';
-import helmet from 'helmet';
-import morgan from 'morgan';
 import generateRoute from './routes/generate';
 
 dotenv.config();
@@ -28,17 +25,9 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(helmet());
-app.use(compression());
 app.use(express.json());
-app.use(morgan('combined'));
 
 app.use('/api', generateRoute);
-
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Internal Server Error' });
-});
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => {

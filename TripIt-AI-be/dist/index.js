@@ -6,9 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
-const compression_1 = __importDefault(require("compression"));
-const helmet_1 = __importDefault(require("helmet"));
-const morgan_1 = __importDefault(require("morgan"));
 const generate_1 = __importDefault(require("./routes/generate"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
@@ -29,15 +26,8 @@ const corsOptions = {
     credentials: true,
 };
 app.use((0, cors_1.default)(corsOptions));
-app.use((0, helmet_1.default)());
-app.use((0, compression_1.default)());
 app.use(express_1.default.json());
-app.use((0, morgan_1.default)('combined'));
 app.use('/api', generate_1.default);
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ error: 'Internal Server Error' });
-});
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
     console.log(`Backend server running on port ${port}`);
