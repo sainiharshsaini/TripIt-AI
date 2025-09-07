@@ -16,7 +16,7 @@ export async function generateTripPlan(prompt: string): Promise<string> {
     const config = {
         responseMimeType: 'application/json',
     };
-    const model = 'gemini-2.5-flash';
+    const model = 'gemini-1.5-flash';
     const contents = [
         {
             role: 'user',
