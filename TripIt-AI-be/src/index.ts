@@ -15,13 +15,15 @@ app.use(helmet());
 const allowedOrigins = [process.env.FRONTEND_URL || 'http://localhost:3000'];
 
 const corsOptions = {
+  // allow requests with no origin (like mobile apps, curl, Postman)
   origin: (origin: string | undefined, callback: any) => {
     if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
+      return callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      return callback(new Error('Not allowed by CORS'));
     }
-  }
+  },
+  credentials: true // allow cookies & authorization headers
 };
 
 app.use(cors(corsOptions));
