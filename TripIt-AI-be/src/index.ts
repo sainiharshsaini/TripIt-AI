@@ -8,9 +8,8 @@ dotenv.config();
 const app = express();
 
 const allowedOrigins = [
-  'http://localhost:5173',
-  'https://tripit-ai-fe.vercel.app',
-  'https://tripit-ai-4n99q0f8d-harsh-sainis-projects-87c6ad77.vercel.app',
+  'http://localhost:3000',
+  'https://tripit-ai-fe.vercel.app'
 ];
 
 const corsOptions = {

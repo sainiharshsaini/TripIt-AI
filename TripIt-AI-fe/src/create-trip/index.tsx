@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AI_PROMPT, budgetOptions, travelerOptions } from "@/lib/constants/options";
@@ -41,12 +41,13 @@ interface User {
 }
 
 function CreateTrip() {
-    const [place, setPlace] = useState<LocationOption | null>(null);
+    const [place, setPlace] = useState<any | null>(null);
     const [formData, setFormData] = useState<FormData>({});
     const [openDialog, setOpenDialog] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
 
     const backendUrl = import.meta.env.VITE_TRIPIT_BACKEND_URL ?? "";
+    const googlePlacesApiKey = import.meta.env.VITE_GOOGLE_PLACE_API_KEY as string | undefined;
     const navigate = useNavigate();
 
     const handleInputChange = (name: keyof FormData, value: unknown) => {
@@ -56,9 +57,15 @@ function CreateTrip() {
         }));
     };
 
-    // useEffect(() => {
-    //     console.log(formData);
-    // }, [formData]);
+    useEffect(() => {
+        console.log(formData);
+    }, [formData]);
+
+    useEffect(() => {
+        if (!googlePlacesApiKey) {
+            toast.error("Google Places API key missing. Set VITE_GOOGLE_PLACE_API_KEY");
+        }
+    }, [googlePlacesApiKey]);
 
     const login = useGoogleLogin({
         onSuccess: (codeRes) => GetUserProfile(codeRes),
@@ -94,11 +101,11 @@ function CreateTrip() {
             .replace("{budget}", formData.budget || "");
 
 
-        // console.log(FINAL_PROMPT);
+        console.log(FINAL_PROMPT);
 
         try {
             const result = await axios.post(`${backendUrl}/api/generate`, { prompt: FINAL_PROMPT });
-            // console.log(result.data.trip);
+            console.log(result.data.trip);
             SaveAiTrip(result.data.trip);
         } catch (error) {
             console.error("Error sending message:", error);
@@ -167,16 +174,48 @@ function CreateTrip() {
             <div className="mt-16 flex flex-col gap-10">
                 <div>
                     <h2 className="text-xl my-3 font-medium">What is destination of choice?</h2>
-                    <GooglePlacesAutocomplete
-                        apiKey={import.meta.env.VITE_GOOGLE_PLACE_API_KEY}
-                        selectProps={{
-                            value: place,
-                            onChange: (value: any) => {
-                                setPlace(value);
-                                handleInputChange("location", value);
-                            },
-                        }}
-                    />
+                    {googlePlacesApiKey ? (
+                        <GooglePlacesAutocomplete
+                            apiKey={googlePlacesApiKey}
+                            apiOptions={{ language: "en", region: "US" }}
+                            selectProps={{
+                                value: place,
+                                onChange: (value: any) => {
+                                    setPlace(value);
+                                    console.log(value);
+
+                                    const mapped: LocationOption = {
+                                        label: value?.label ?? "",
+                                        value: value?.value?.description ?? value?.label ?? "",
+                                        place_id: value?.value?.place_id ?? "",
+                                    };
+                                    handleInputChange("location", mapped);
+                                },
+                                placeholder: "Search location...",
+                                isClearable: true
+                            }}
+                            autocompletionRequest={{
+                                types: ["(cities)"],
+                            }}
+                            withSessionToken={true}
+                            debounce={500}
+                            minLengthAutocomplete={3}
+                            onLoadFailed={(error) => {
+                                console.error("Places script load failed", error);
+                                toast.error("Failed to load Google Places. Check API key & billing.");
+                            }}
+                        />
+                    ) : (
+                        <Input
+                            placeholder="Enter city or place"
+                            onChange={(e) =>
+                                handleInputChange("location", {
+                                    label: e.target.value,
+                                    value: e.target.value,
+                                    place_id: "",
+                                })}
+                        />
+                    )}
                 </div>
 
                 <div>

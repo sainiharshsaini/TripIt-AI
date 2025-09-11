@@ -1,7 +1,10 @@
 import { GoogleGenAI } from "@google/genai";
 
 export async function generateTripPlan(prompt: string): Promise<string> {
-    if (!prompt || prompt.trim() === '') {
+
+    console.log("prompt: ", prompt);
+    
+    if (!prompt) {
         throw new Error('Prompt is required');
     }
 
@@ -9,14 +12,23 @@ export async function generateTripPlan(prompt: string): Promise<string> {
         throw new Error('Missing Google Gemini AI API key');
     }
 
-    const ai = new GoogleGenAI({
-        apiKey: process.env.GOOGLE_GEMINI_AI_API_KEY,
-    });
+    const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_GEMINI_AI_API_KEY });
+
+    const tools = [
+        {
+            googleSearch: {
+            }
+        },
+    ];
 
     const config = {
-        responseMimeType: 'application/json',
+        thinkingConfig: {
+            thinkingBudget: -1,
+        },
+        tools,
     };
-    const model = 'gemini-1.5-flash';
+
+    const model = 'gemini-2.5-flash';
     const contents = [
         {
             role: 'user',
@@ -43,6 +55,8 @@ export async function generateTripPlan(prompt: string): Promise<string> {
             }
         }
 
+        console.log(fullText);
+        
         return fullText;
     } catch (error) {
         console.error('Error in generateTripPlan:', error);
