@@ -95,18 +95,18 @@ function CreateTrip() {
 
         setLoading(true);
 
-        const FINAL_PROMPT = AI_PROMPT.replace("{location}", formData.location.label || "")
-            .replace(/{totalDays}/g, formData.noOfDays || "")
-            .replace("{traveler}", formData.traveler || "")
-            .replace("{budget}", formData.budget || "");
+        const FINAL_PROMPT = AI_PROMPT.replace('{location}', formData.location.label)
+            .replace('{totalDays}', formData.noOfDays)
+            .replace('{traveler}', formData.traveler)
+            .replace('{budget}', formData.budget);
 
 
         console.log(FINAL_PROMPT);
 
         try {
             const result = await axios.post(`${backendUrl}/api/generate`, { prompt: FINAL_PROMPT });
-            console.log(result.data.trip);
-            SaveAiTrip(result.data.trip);
+            console.log(result.data.trip.text());
+            SaveAiTrip(result.data.trip.text());
         } catch (error) {
             console.error("Error sending message:", error);
             toast.error("Failed to generate trip. Please try again.");

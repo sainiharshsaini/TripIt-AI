@@ -2,33 +2,43 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import generateRoute from './routes/generate';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 
 dotenv.config();
 
 const app = express();
+const port = process.env.PORT || 3001;
 
-const allowedOrigins = [
-  'http://localhost:3000',
-  'https://tripit-ai-fe.vercel.app'
-];
+app.use(helmet());
+
+const allowedOrigins = [process.env.FRONTEND_URL || 'http://localhost:3000'];
 
 const corsOptions = {
-  origin: function (origin: any, callback: any) {
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+  origin: (origin: string | undefined, callback: any) => {
+    if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
-  },
-  credentials: true,
+  }
 };
 
 app.use(cors(corsOptions));
 app.use(express.json());
 
-app.use('/api', generateRoute);
+const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 50, // Limit each IP to 50 requests per window
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: 'Too many requests from this IP, please try again after 15 minutes',
+});
 
-const port = process.env.PORT || 4000;
+app.use('/api', apiLimiter, generateRoute);
+
 app.listen(port, () => {
   console.log(`Backend server running on port ${port}`);
 });
+
+export default app;
